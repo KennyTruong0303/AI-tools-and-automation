@@ -1,0 +1,32 @@
+---
+title: "AI tools and automation"
+author: "Kenny Truong"
+date: "2023-04-18"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+rm(list = ls())
+pacman::p_load(tidyverse, tidytext, tm, text2vec, ggplot2, factoextra, dplyr, textstem, SnowballC)
+knitr::opts_chunk$set(echo = TRUE, include = TRUE, message = FALSE, warning = FALSE)
+knitr::opts_knit$set(root.dir = "C:/Users/kenny/OneDrive/Cognitive Science_22/2.sem/Applied Cognitive Science/How_likely_is_ai_to_take_over/Data")
+```
+
+```{r}
+my_df <- read.csv("Data/AI tools and automation (Responses) - Form Responses 1.csv")
+my_df$Timestamp <- NULL
+```
+
+
+
+```{r}
+ggplot(my_df, aes(x = "Gender", y = "I have a good understanding of the current news in AI research and implementation of AI.")) + 
+  geom_bar(stat = "identity", fill = "steelblue") +
+  #labs(x = "Work Sectors", y = "Probability of Automation") +
+  #ggtitle("Probability of Automation by Work Sector")
+
+```
+
+
+
+
