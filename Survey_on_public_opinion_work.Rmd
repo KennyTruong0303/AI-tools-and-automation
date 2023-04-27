@@ -1,0 +1,70 @@
+---
+title: "AI tools and automation - survey"
+author: "Kenny Truong"
+date: "2023-04-18"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+# remove all objects from the environment
+rm(list = ls())
+
+# use pacman package to load multiple packages at once
+# load tidyverse, tidytext, tm, text2vec, ggplot2, factoextra, dplyr, textstem and SnowballC
+pacman::p_load(tidyverse, tidytext, tm, text2vec, ggplot2, factoextra, dplyr, textstem, SnowballC)
+
+# set options for code chunks
+# include = FALSE to avoid showing the code
+# message = FALSE, warning = FALSE to avoid showing messages and warnings
+knitr::opts_chunk$set(echo = TRUE, include = FALSE, message = FALSE, warning = FALSE)
+
+# set root directory for knitting the document
+knitr::opts_knit$set(root.dir = "C:/Users/kenny/OneDrive/Cognitive Science_22/2.sem/Applied Cognitive Science/How_likely_is_ai_to_take_over/Data")
+```
+
+```{r}
+#Load in csv file
+my_surv <- read.csv("Data/AI tools and automation.csv")
+#Anonymization by removing timestamp
+my_surv$Timestamp <- NULL
+```
+
+
+```{r}
+##Aggregating multiple choice 1-5 by age
+#Creating a new dataframe using current dataframe
+age_agg <- my_surv %>%
+#Grouping age by their respective age
+  group_by(Age) %>%
+#Taking the mean answer respective to each age
+  summarise(mean_answer = mean(X9..I.feel.that.the.news.coverage.on.AI.technology.is.confusing.and.or..misleading.))
+
+#Starting the png file
+png('I feel that the news coverage on AI technology is confusing and or misleading.png')
+#Making the plot defining x and y
+ggplot(age_agg, aes(x = Age, y = mean_answer)) + 
+#Making it a bar plot
+  geom_bar(stat = "identity", fill = "#e99020", FUN = mean, width = 0.5) +
+#Make x continuous to our liking
+  scale_x_continuous(breaks=seq(19, 62, by=2)) +
+#Make y continuous to our liking
+  scale_y_continuous(breaks=seq(0, 5, by=1)) +
+#Creating a line connecting the bars
+  geom_line(color = "#ee9303") +
+#Using good theme
+  theme_classic() +
+#Create a point for each bar
+  geom_point(color = "#f65792", size = 3) +
+#Changing the plot background
+  theme(plot.background = element_rect(fill = "#f65792")) +
+#Changing x and y labs
+  labs(x = "Age", y = "1-5") +
+#Creating a title
+  ggtitle("I feel that the news coverage on AI technology is confusing and or misleading")
+#Saves the file locally
+dev.off
+```
+
+
+
+

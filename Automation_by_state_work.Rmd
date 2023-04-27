@@ -1,0 +1,147 @@
+---
+title: "How_likely_is_ai_to_take_over"
+author: "Kenny Truong"
+date: "2023-04-19"
+output: html_document
+---
+```{r}
+# remove all objects from the environment
+rm(list = ls())
+
+# use pacman package to load multiple packages at once
+# load tidyverse, tidytext, tm, text2vec, ggplot2, factoextra, dplyr, textstem and SnowballC
+pacman::p_load(tidyverse, tidytext, tm, text2vec, ggplot2, factoextra, dplyr, textstem, SnowballC)
+
+# set options for code chunks
+# include = FALSE to avoid showing the code
+# message = FALSE, warning = FALSE to avoid showing messages and warnings
+knitr::opts_chunk$set(echo = TRUE, include = FALSE, message = FALSE, warning = FALSE)
+
+# set root directory for knitting the document
+knitr::opts_knit$set(root.dir = "C:/Users/kenny/OneDrive/Cognitive Science_22/2.sem/Applied Cognitive Science/How_likely_is_ai_to_take_over/Data")
+```
+
+
+```{r}
+#Load in csv file
+auto_states <- read.csv("Data/automation_data_by_state.csv")
+#Remove unnecessary column
+auto_states$SOC <- NULL
+```
+
+
+```{r}
+# Select only the Occupation and Probability columns
+auto_states <- auto_states %>% select(Occupation, Probability)
+
+# Split each string into words
+my_words_list <- lapply(auto_states$Occupation, function(x) strsplit(x, " ")[[1]])
+
+# Combine all the words into a single character vector
+my_words <- unlist(my_words_list)
+
+# Create a data frame with one column for the words
+my_df <- data.frame(words = my_words)
+
+# View the resulting data frame
+my_df
+
+#Create a table with the words
+word_count <- table(my_df$words)
+
+
+# Create a word count table and sort it by frequency in descending order
+word_count <- table(my_df$words)
+word_count_sorted <- word_count[order(-word_count)]
+
+# Words to filter out
+words_to_filter <- c("is", "the", "a", "in", "it", "and", "all", "All", "of")
+
+# Filter out the words from the sorted word count table
+filtered_word_count_sorted <- word_count_sorted[!(names(word_count_sorted) %in% words_to_filter)]
+
+# View the filtered word count table
+view(filtered_word_count_sorted)
+```
+
+
+
+```{r}
+# Create a word count table and sort it by frequency in descending order
+word_count <- table(my_df$words)
+word_count_sorted <- word_count[order(-word_count)]
+
+# Words to filter out
+words_to_filter <- c("is", "the", "a", "in", "it")
+
+# Filter out the words from the sorted word count table
+filtered_word_count_sorted <- word_count_sorted[!(names(word_count_sorted) %in% words_to_filter)]
+
+# Convert the filtered word count data to a data frame
+word_count_df <- data.frame(word = names(filtered_word_count_sorted),
+                            freq = as.numeric(filtered_word_count_sorted))
+
+# Create a bar chart of word frequencies
+ggplot(word_count_df, aes(x = word, y = freq)) +
+  geom_bar(stat = "identity", fill = "blue") +
+  xlab("Word") +
+  ylab("Frequency") +
+  ggtitle("Word Frequency in My Data")
+```
+
+```{r}
+###Now that we know what words and how frequent they are we can categorize the words into their respective work sectors
+
+##Grouping management
+#Creating a new columns work_sectors
+auto_states$work_sectors <- ifelse(grepl("Managers?|executives?|supervisors?|directors?|administrators?|assistants?|coordinators?|auditors?|chiefs?|presidents?", auto_states$Occupation, ignore.case = TRUE), "Management",
+                                                                     ifelse(grepl("machines?|technicians?|operators?|equipments?|computers?", auto_states$Occupation, ignore.case = TRUE), "Technology",
+                            ifelse(grepl("doctors?|nurses?|therapists?|pharmacists?|physicians?|surgeons?|dentists?|veterinarians?|clinicals?|healths?|orthondists?|medicals?", auto_states$Occupation, ignore.case = TRUE), "Healthcare",
+                                   
+ifelse(grepl("Scientists", auto_states$Occupation, ignore.case = TRUE), "Research",
+                                          ifelse(grepl("teachers?|professors?|instructors?|counselors?|librarians?|educationals?|journalists?|researchers?|principals?|tutors?", auto_states$Occupation, ignore.case = TRUE), "Education",
+                                   
+ifelse(grepl("sales?", auto_states$Occupation, ignore.case = TRUE), "Marketing",
+                            ifelse(grepl("lawyers?|paralegals?|mayors?|councilpersons?|attorneys?|corporates?", auto_states$Occupation, ignore.case = TRUE), "Legal",
+                                   
+ifelse(grepl("constructions?|carpenters?|electricians?|plumbers?|welders?", auto_states$Occupation, ignore.case = TRUE), "Construction",
+                            ifelse(grepl("manufacturings?|assemblys?|fabrications?|productions?|printings?|operators?|inspectors?|engineernigs?|mechanics?|", auto_states$Occupation, ignore.case = TRUE), "Manufacturing",
+                                   
+       
+ifelse(grepl("clerks?|interns?|financials?|treasurers?|finances?|econmists?|budgets?|advisors?", auto_states$Occupation, ignore.case = TRUE), "Finances",
+       
+                            "Others"))))))))))
+
+#Checking for NA's
+sum(is.na(auto_states))
+#Checking auto_states
+head(auto_states)
+```
+
+```{r}
+#Counting occupations in work_sectors
+auto_states %>%
+  group_by(work_sectors) %>%
+  summarize(count = n())
+```
+
+```{r}
+# calculate the mean probability of automation by work sector
+sector_prob <- aggregate(auto_states$Probability, by = list(auto_states$work_sectors), FUN = mean)
+
+#Make pdf ready
+pdf('Probability_of_Automation_By_work_sector.pdf')
+# Create the barplot
+ggplot(sector_prob, aes(x = Group.1, y = x)) + 
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(x = "Work Sectors", y = "Probability of Automation") +
+  ggtitle("Probability of Automation by Work Sector")
+#Saves plot locally
+dev.off()
+```
+
+
+
+
+
+
