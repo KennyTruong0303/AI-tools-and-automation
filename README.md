@@ -1,7 +1,7 @@
 # AI-tools-and-automation
 We are two Cognitive Science students trying to understand the public view on AI technology and its implications in everyday and professional life, and we intend to make AI tools and automation on the workplace more understandable and more clear to not only us but everyone else that is interested. 
 
-In this github repo you will find:
+## In this github repo you will find:
 
 A. an R-markdown explaining every line of what we did in our analysis of automation in the states
 
