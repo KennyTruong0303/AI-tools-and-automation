@@ -4,13 +4,23 @@ author: "Kenny Truong"
 date: "2023-04-19"
 output: html_document
 ---
-
-```{r setup, include=FALSE}
+```{r}
+# remove all objects from the environment
 rm(list = ls())
+
+# use pacman package to load multiple packages at once
+# load tidyverse, tidytext, tm, text2vec, ggplot2, factoextra, dplyr, textstem and SnowballC
 pacman::p_load(tidyverse, tidytext, tm, text2vec, ggplot2, factoextra, dplyr, textstem, SnowballC)
-knitr::opts_chunk$set(echo = TRUE, include = TRUE, message = FALSE, warning = FALSE)
+
+# set options for code chunks
+# include = FALSE to avoid showing the code
+# message = FALSE, warning = FALSE to avoid showing messages and warnings
+knitr::opts_chunk$set(echo = TRUE, include = FALSE, message = FALSE, warning = FALSE)
+
+# set root directory for knitting the document
 knitr::opts_knit$set(root.dir = "C:/Users/kenny/OneDrive/Cognitive Science_22/2.sem/Applied Cognitive Science/How_likely_is_ai_to_take_over/Data")
 ```
+
 
 ```{r}
 auto_states <- read.csv("Data/automation_data_by_state.csv")
