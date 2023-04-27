@@ -5,6 +5,6 @@ In this github repo you will find:
 
 A. an R-markdown explaining every line of what we did in our analysis of automation in the states
 
-B. an R-markdown explaining every line of what we did in our sentiment analysis of our survey that is published here https://docs.google.com/forms/d/1BdU8WcH1LrtyVD_zP73omj7QZa210N_vBew4eTHgUi4/edit
+B. an R-markdown explaining every line of the barplot we did about our survey that you can find here: https://docs.google.com/forms/d/1BdU8WcH1LrtyVD_zP73omj7QZa210N_vBew4eTHgUi4/edit
 
-C. Our product that includes tips on what to expect, individual work sectors and their implications with AI in the future, and a sentiment analysis on people's general view on AI tools and automation in the workplaces
+C. Our product that includes tips on what to expect, individual work sectors and their implications with AI in the future, and peoples' public opinion  on AI tools and automation in the workplaces
